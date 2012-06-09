@@ -1,7 +1,15 @@
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
 
+
 <link rel="stylesheet" type="text/css" href="style.css">
+
+<script>
+	var socket = io.connect('http://localhost:8080');
+
+	socket.on('connect', function(){
+		socket.emit('adduser', prompt("What's your name?"));
+	});
 
 <script>
   var socket = io.connect('http://localhost:8080/');
@@ -42,7 +50,7 @@
 </div>
 
 <div id="div2">
-  <div id="conversation"></div>
-  <input id="data" style="width:200px;"/>
-  <input type="button" id="datasend" value="send"/>
+	<div id="conversation"></div>
+	<input id="data" style="width:200px;"/>
+	<input type="button" id="datasend" value="send"/>
 </div>

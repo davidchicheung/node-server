@@ -1,9 +1,12 @@
 <script src="/socket.io/socket.io.js"></script>
 <script src="jquery.min.js"></script>
+<script src="bootstrap.js"></script>
 
 <link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="bootstrap.css">
 
 <script>
+  /*
   var socket = io.connect('http://localhost:8080/');
 	
   socket.on('connect', function(){
@@ -34,15 +37,64 @@
       }
     });
   });
+  */
 </script>
+<body>
+  <!-- needs to force the picture on import to shrink to a smaller size? -->
+  <center>
+    <div id="mainCarousel" class="carousel slide" style="width: 600px;">
+      <div class="carousel-inner">
+        <!-- when a user adds a new photo this should dynamically add this html code -->
+        <div class="active item">
+          <img alt="" src="img/pic1.jpg">
+          <div class="carousel-caption">
+            <!-- when user adds a photo should modal popup to add a caption and comments (optional) -->
+            <h4>Caption Title for pic1.jpg</h4>
+            <p>Something Something</p>
+          </div>
+        </div>
+      
+        <div class="item">
+          <img alt="" src="img/pic2.jpg">
+        
+          <div class="carousel-caption">
+            <h4>Caption Title for pic2.jpg</h4>
+            <p>Wow lamez sauceiar</p>
+          </div>
+        </div>
+      
+        <div class="item">
+          <img alt="" src="img/pic3.jpg">
+          <div class="carousel-caption">
+            <h4>Caption Title for pic2.jpg</h4>
+            <p>Whisper Whisper</p>
+          </div>
+        </div>
+      </div>
 
-<div id="div1">
-  <b>USERS</b>
-  <div id="users"></div>
-</div>
+      <a class="carousel-control left" href="#mainCarousel" data-slide="prev">&lsaquo;</a>
+      <a class="carousel-control right" href="#mainCarousel" data-slide="next">&rsaquo;</a>
+    </center>
+  </div>
 
-<div id="div2">
-	<div id="conversation"></div>
-	<input id="data" style="width:200px;"/>
-	<input type="button" id="datasend" value="send"/>
-</div>
+  <!--
+  <div id="div1">
+    <b>USERS</b>
+    <div id="users"></div>
+  </div>
+
+  <div id="div2">
+  	<div id="conversation"></div>
+  	<input id="data" style="width:200px;"/>
+  	<input type="button" id="datasend" value="send"/>
+  </div>
+  -->
+</body>
+
+<script>
+  $(document).ready(function(){
+    $('.carousel').carousel({
+      interval: 5000,
+    });
+  });
+</script>

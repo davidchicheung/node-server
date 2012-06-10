@@ -11,6 +11,14 @@ function handler(request, response){
 	  filePath = './index.html';
 	}
 	
+	if(filePath == "./img/"){
+    fs.readdir(filePath, function(error, content){
+      response.writeHead(200, { 'Content-Type': 'application/json' });
+      response.write(JSON.stringify(content));  
+      response.end();
+    })
+  }
+	
 	var extname = path.extname(filePath);
 	var contentType = 'text/html';
 	switch(extname){
@@ -22,7 +30,7 @@ function handler(request, response){
 	    break;
 	}
 	
-	path.exists(filePath, function(exists){
+	path.exists(filePath, function(exists){	  
 	  if(exists){
 	    fs.readFile(filePath, function(error, content){
 	      if(error){

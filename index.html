@@ -1,89 +1,112 @@
-<script src="/socket.io/socket.io.js"></script>
-<script src="jquery.min.js"></script>
-<script src="bootstrap.js"></script>
-
-<link rel="stylesheet" type="text/css" href="style.css">
-<link rel="stylesheet" type="text/css" href="bootstrap.css">
-
-<script>
-  /*
-  var socket = io.connect('http://localhost:8080/');
-	
-  socket.on('connect', function(){
-    socket.emit('adduser', prompt("What's your name?"));
-  });
-
-  socket.on('updatechat', function (username, data) {
-    $('#conversation').append('<b>' + username + ':</b> ' + data + '<br>');
-  });
-	
-  socket.on('updateusers', function(data) {
-    $('#users').empty();
-    $.each(data, function(key, value) {
-      $('#users').append('<div>' + key + '</div>');
-    });
-  });
-
-  $(function(){
-    $('#datasend').click( function() {
-      var message = $('#data').val();
-      $('#data').val('');
-      socket.emit('sendchat', message);
-    });
-    $('#data').keypress(function(e) {
-      if(e.which == 13) {
-        $(this).blur();
-        $('#datasend').focus().click();
-      }
-    });
-  });
-  */
-</script>
-<body>
-  <!-- needs to force the picture on import to shrink to a smaller size? -->
-  <center>
-    <div id="mainCarousel" class="carousel slide" style="width: 600px;">
-      <div class="carousel-inner">
-        <!-- when a user adds a new photo this should dynamically add this html code -->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="bootstrap.css">
+  </head>
+  
+  <body>
+    <!-- needs to force the picture on import to shrink to a smaller size? -->
+    <div id="photoGallery">
+      <div id="thumbnailGallery">
+        <div id="thumbnails">
+          <ul class="thumbnails"/>
+        </div>
+        <div id="dropZone">
+          <span>Drop Zone</span>
+        </div>
       </div>
+      <div id="mainCarousel" class="carousel slide">
+        <div class="carousel-inner">
+          <!-- when a user adds a new photo this should dynamically add this html code -->
+        </div>
 
-      <a class="carousel-control left" href="#mainCarousel" data-slide="prev">&lsaquo;</a>
-      <a class="carousel-control right" href="#mainCarousel" data-slide="next">&rsaquo;</a>
-    </center>
-  </div>
+        <a class="carousel-control left" href="#mainCarousel" data-slide="prev">&lsaquo;</a>
+        <a class="carousel-control right" href="#mainCarousel" data-slide="next">&rsaquo;</a>
+      </div>
+    </div>
+  </body>
 
-  <!--
-  <div id="div1">
-    <b>USERS</b>
-    <div id="users"></div>
-  </div>
+  <script>
+    $(document).ready(function(){
+      $.ajax({
+        url: window.location + "img/",
+        success: function(data){
+          for(i in data){
+            var image = data[i];
+            if(i == 0){
+              $(".carousel-inner").append("<div class='active item'><img alt='' src='img/" + image + "'></div");
+            }
+            else{
+              $(".carousel-inner").append("<div class='item'><img alt='' src='img/" + image + "'></div");
+            }
+            var thumbnail = ["<li><a class='thumbnail' onclick='imageToCarousel(",
+                             i,
+                             ")'><img src='img/",
+                             image,
+                             "'/></a></li>"
+                            ].join("");
 
-  <div id="div2">
-  	<div id="conversation"></div>
-  	<input id="data" style="width:200px;"/>
-  	<input type="button" id="datasend" value="send"/>
-  </div>
-  -->
-</body>
-
-<script>
-  $(document).ready(function(){
-    $.ajax({
-      url: window.location + "img/",
-      success: function(data){
-        for(i in data){
-          if(i == 0){
-            $(".carousel-inner").append("<div class='active item'><img alt='' src='img/" + data[i] + "'></div");
-          }
-          else{
-            $(".carousel-inner").append("<div class='item'><img alt='' src='img/" + data[i] + "'></div");
+            $("ul.thumbnails").append(thumbnail);
           }
         }
+      });
+      
+      $('#mainCarousel').carousel({
+        interval: 5000,
+      });
+
+      $
+    });
+
+    function imageToCarousel(index) {
+      $("#mainCarousel").carousel(index);
+    }
+
+    var dropZone = document.getElementById("dropZone");
+  
+    dropZone.addEventListener("dragleave", dragLeave, false);
+    dropZone.addEventListener("dragover", dragEnter, false);
+    dropZone.addEventListener("drop", drop, false);
+  
+    function stopEvent(e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+
+    function dragEnter(e) {
+      stopEvent(e);
+      dropZone.style.border = "1px solid #0088CC";
+    }
+
+    function dragLeave(e) {
+      stopEvent(e);
+      dropZone.style.border = "1px dashed #BBBBBB";
+    }
+
+    function drop(e) {
+      stopEvent(e);
+      dropZone.style.border = "1px dashed #BBBBBB";
+      upload(e.dataTransfer.files);
+    }
+
+    function upload(files) {
+      for(i in files) {
+        var reader = new FileReader();
+        var file = files[i];
+        
+        reader.onload = (function() {
+          return function(e) {
+            //send file upload event here: e.target.result
+          }
+        })(file);
+
+        reader.readAsDataURL(file);
       }
-    });
-    
-    $('.carousel').carousel({
-      interval: 5000,
-    });
-  });
-</script>
+    }
+  </script>
+</html>

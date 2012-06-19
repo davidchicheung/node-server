@@ -3,19 +3,20 @@ var express = require('express')
 var mime = require('mime');
 var url = require('url');
 var fs = require('fs');
+var path = require('path');
 
 var app = express.createServer(form({ keepExtensions: true }));
 
 documentRoot = "./public_html";
 
-app.post(/upload$/, function(req, resp) {
+app.post(/upload\/$/, function(req, resp) {
     req.form.complete(function(err, fields, files) {
         if (err) {
             return write500(resp, "failed to upload image");
         }
 
         var src = files.image.path;
-        var dest = documentRoot + '/uploads/' + files.image.name;
+        var dest = documentRoot + '/img/' + files.image.name;
         console.log(src);
         console.log(dest);
 
@@ -37,15 +38,17 @@ app.get(/.*/, function(req, resp) {
     console.log('requesting : ' + req.path);
     fileName = __dirname + '/public_html' + req.path;
 
-    fs.stat(fileName, function(err, stats) {
+    (function(file) {
+        fs.stat(file, function(err, stats) {
 
         if (err) {
+            console.log('file not found');
             return write404(resp, req.path + ' not found');
         }
 
         if (stats.isDirectory()) {
 
-            fs.readdir(fileName, function(err, files) {
+            fs.readdir(file, function(err, files) {
                 resp.writeHead(200, {})
                 resp.write(JSON.stringify(files));
                 resp.end();
@@ -54,14 +57,19 @@ app.get(/.*/, function(req, resp) {
 
         } else {
 
-            fs.readFile(fileName, function(error, content) {
+            fs.readFile(file, function(error, content) {
 
                 if (error) {
                     return write404(resp, req.path + ' not found');
                 } else {
 
+                    console.log(
+                        'serving file ' + req.path + ': ' +
+                        mime.lookup(req.path)
+                        );
+
                     resp.writeHead(200, {
-                        'Content-Type': mime.lookup(fileName)
+                        'Content-Type': mime.lookup(req.path)
                         })
                     resp.write(content);
                     resp.end();
@@ -69,9 +77,9 @@ app.get(/.*/, function(req, resp) {
 
                 }
             });
-        }
-    });
-
+          }
+      })
+    })(fileName);
 });
 
 function write404(resp, message) {
@@ -86,4 +94,4 @@ function write500(resp, message) {
     resp.end();
 }
 
-app.listen(3000);
+app.listen(4000);

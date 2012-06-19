@@ -1,6 +1,6 @@
-var express = require('express')
-  , form = require('connect-form');
-var mime = require('mime');
+var express = require('express'); //external
+var form = require('connect-form'); //external
+var mime = require('mime'); //external
 var url = require('url');
 var fs = require('fs');
 var path = require('path');
@@ -62,11 +62,12 @@ app.get(/.*/, function(req, resp) {
                 if (error) {
                     return write404(resp, req.path + ' not found');
                 } else {
-
+                    /*
                     console.log(
                         'serving file ' + req.path + ': ' +
                         mime.lookup(req.path)
                         );
+                    */
 
                     resp.writeHead(200, {
                         'Content-Type': mime.lookup(req.path)

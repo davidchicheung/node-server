@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<html lang="en-US">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="UTF-8"/>
     <script src="/socket.io/socket.io.js"></script>
     <script src="jquery.min.js"></script>
     <script src="bootstrap.js"></script>
@@ -59,8 +59,6 @@
       $('#mainCarousel').carousel({
         interval: 5000,
       });
-
-      $
     });
 
     function imageToCarousel(index) {
@@ -95,17 +93,16 @@
     }
 
     function upload(files) {
-      for(i in files) {
-        var reader = new FileReader();
+      var i;
+      for(i = 0; i < files.length; i++) {
         var file = files[i];
-        
-        reader.onload = (function() {
-          return function(e) {
-            //send file upload event here: e.target.result
-          }
-        })(file);
 
-        reader.readAsDataURL(file);
+        var formData = new FormData();
+        formData.append("image", file);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/upload/", true);
+        xhr.send(formData);
       }
     }
   </script>

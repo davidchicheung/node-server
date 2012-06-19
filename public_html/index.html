@@ -94,17 +94,16 @@
     }
 
     function upload(files) {
-      for(i in files) {
-        var reader = new FileReader();
+      var i;
+      for(i = 0; i < files.length; i++) {
         var file = files[i];
-        
-        reader.onload = (function() {
-          return function(e) {
-            //send file upload event here: e.target.result
-          }
-        })(file);
 
-        reader.readAsDataURL(file);
+        var formData = new FormData();
+        formData.append("image", file);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/upload/", true);
+        xhr.send(formData);
       }
     }
   </script>

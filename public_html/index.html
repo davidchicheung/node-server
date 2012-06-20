@@ -90,6 +90,7 @@
     function drop(e) {
       stopEvent(e);
       dropZone.style.border = "1px dashed #BBBBBB";
+            
       upload(e.dataTransfer.files);
     }
 
@@ -97,12 +98,24 @@
       var i;
       for(i = 0; i < files.length; i++) {
         var file = files[i];
-
+        
         var formData = new FormData();
         formData.append("image", file);
 
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "/upload/", true);
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4) {
+            //thumbnail portion
+            var newestThumbnailCount = $("ul.thumbnails li").length;
+            var newestThumbnail = "<li><a class='thumbnail' onclick='imageToCarousel(" + newestThumbnailCount + ")'><img src='img/" + file.fileName + "'/></a></li>" + $("ul.thumbnails").html();
+            $("ul.thumbnails").html(newestThumbnail);
+            
+            //carousel portion
+            $(".item").removeClass("active");
+            $(".carousel-inner").append("<div class='active item'><img alt='' src='img/" + encodeURI(file.fileName) + "'></div");
+          }
+        };
         xhr.send(formData);
       }
     }

@@ -35,7 +35,7 @@
       $.ajax({
         url: "/img/",
         dataType: 'json',
-        success: function(data){
+        success: function(data){          
           for(i in data){
             var image = data[i];
             if(i == 0){
@@ -97,7 +97,7 @@
     function upload(files) {
       var i;
       for(i = 0; i < files.length; i++) {
-        var file = files[i];
+        var file = files[i];        
         
         var formData = new FormData();
         formData.append("image", file);
@@ -108,13 +108,13 @@
           if (xhr.readyState == 4) {
             //thumbnail portion
             var newestThumbnailCount = $("ul.thumbnails li").length;
-            var newestThumbnail = "<li><a class='thumbnail' onclick='imageToCarousel(" + newestThumbnailCount + ")'><img src='img/" + file.fileName + "'/></a></li>" + $("ul.thumbnails").html();
+            var newestThumbnail = "<li><a class='thumbnail' onclick='imageToCarousel(" + newestThumbnailCount + ")'><img src='img/" + file.name + "'/></a></li>" + $("ul.thumbnails").html();
             $("ul.thumbnails").html(newestThumbnail);
             
             //carousel portion
             $(".item").removeClass("active");
-            $(".carousel-inner").append("<div class='active item'><img alt='' src='img/" + encodeURI(file.fileName) + "'></div");
-          }
+            $(".carousel-inner").append("<div class='active item'><img alt='' src='img/" + encodeURI(file.name) + "'></div");
+          }          
         };
         xhr.send(formData);
       }

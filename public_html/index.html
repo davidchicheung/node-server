@@ -33,7 +33,7 @@
   <script>
     $(document).ready(function(){
       $.ajax({
-        url: "/img/",
+        url: "img/",
         dataType: 'json',
         success: function(data){          
           for(i in data){
@@ -103,7 +103,7 @@
         formData.append("image", file);
 
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/upload/", true);
+        xhr.open("POST", "upload/", true);
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
             //thumbnail portion

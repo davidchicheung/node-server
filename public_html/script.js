@@ -1,4 +1,6 @@
 // Image Carousel Setup
+var cycling = false;
+
 $( document ).ready( function() {
     $.ajax({
         url: "img/",
@@ -36,15 +38,23 @@ $( document ).ready( function() {
                 $( "ul.thumbnails" ).append( thumbnail );
             }
 
-            $( '#mainCarousel' ).carousel({
-                interval: 5000,
-            });
+            if ( data.length <= 0 ) {
+                $( '#mainCarousel' ).carousel('pause');
+            } else {
+                $( '#mainCarousel' ).carousel('cycle');
+            }
         }
     });
+
 });
 
 function toCarouselImage( index ) {
     $( "#mainCarousel" ).carousel( index );
+
+    if ( !cycling ) {
+        $( '#mainCarousel' ).carousel( "cycle" );
+        cycling = true;
+    }
 }
 
 // HTML5 Drag & Drop Setup

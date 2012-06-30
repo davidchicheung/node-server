@@ -12,6 +12,8 @@ div#mainCarousel {
     margin: 0;
     padding: 0;
     width: 600px;
+    height: 381px;
+    overflow: hidden;
 }
 
 div#thumbnailGallery {
@@ -70,4 +72,12 @@ div#thumbnails .thumbnails img {
     margin: 0 !important;
     font-size: 20px;
     line-height: 40px;
+}
+
+.carousel .active {
+    text-align: center;
+}
+
+.carousel .item > img {
+    display: inline !important;
 }

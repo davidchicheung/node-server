@@ -6,6 +6,9 @@ var fs = require('fs');
 var path = require('path');
 
 var app = express.createServer(form({ keepExtensions: true }));
+var io = require('socket.io').listen(app);
+
+var clients = [];
 
 documentRoot = "./public_html";
 
@@ -17,13 +20,13 @@ app.post(/upload\/$/, function(req, resp) {
 
         var src = files.image.path;
         var dest = documentRoot + '/img/' + files.image.name;
-        console.log(src);
-        console.log(dest);
 
         fs.rename(src, dest, function(err) {
             if (err) {
                 return write500(resp, "failed to upload image");
             }
+
+            io.sockets.emit("update", { location : files.image.name });
 
             resp.writeHead(200, {"Content-Type":"application/json"})
             resp.write(JSON.stringify({"status":"complete"}));
@@ -35,7 +38,9 @@ app.post(/upload\/$/, function(req, resp) {
 
 // get static files
 app.get(/.*/, function(req, resp) {
+
     console.log('requesting : ' + req.path);
+
     fileName = __dirname + '/public_html' + req.path;
 
     (function(file) {

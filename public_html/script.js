@@ -35,15 +35,15 @@ $( document ).ready( function() {
 
                 $( "ul.thumbnails" ).append( thumbnail );
             }
+
+            $( '#mainCarousel' ).carousel({
+                interval: 5000,
+            });
         }
-    });
-    
-    $( '#mainCarousel' ).carousel({
-        interval: 5000,
     });
 });
 
-function imageToCarousel( index ) {
+function toCarouselImage( index ) {
     $( "#mainCarousel" ).carousel( index );
 }
 
@@ -81,7 +81,7 @@ function addImageToThumbnails( fileName ) {
     var count = $( "ul.thumbnails li" ).length;
     
     var thumbnail = 
-            [ "<li><a class='thumbnail' onclick='imageToCarousel(",
+            [ "<li><a class='thumbnail' onclick='toCarouselImage(",
               count,
               ")'><img src='img/",
               fileName,
@@ -102,6 +102,7 @@ function addImageToCarousel( fileName ) {
             ].join( "" );
 
     $( ".carousel-inner" ).append( thumbnail );
+
 }
 
 function upload( files ) {
@@ -124,4 +125,5 @@ var socket = io.connect( '192.168.0.14:8080' );
 socket.on('update', function ( data ) {
     addImageToThumbnails( data.fileName );
     addImageToCarousel( data.fileName );
+    toCarouselImage(  $( "ul.thumbnails li" ).length );
 });

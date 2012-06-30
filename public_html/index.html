@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="bootstrap.js"></script>
     <script src="socket.io/socket.io.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
@@ -10,7 +10,6 @@
   </head>
   
   <body>
-    <!-- needs to force the picture on import to shrink to a smaller size? -->
     <div id="photoGallery">
       <div id="thumbnailGallery">
         <div id="thumbnails">
@@ -22,9 +21,8 @@
       </div>
       <div id="mainCarousel" class="carousel slide">
         <div class="carousel-inner">
-          <!-- when a user adds a new photo this should dynamically add this html code -->
+          <!-- when a user adds a new photo this should dynamically udate with HTML -->
         </div>
-
         <a class="carousel-control left" href="#mainCarousel" data-slide="prev">&lsaquo;</a>
         <a class="carousel-control right" href="#mainCarousel" data-slide="next">&rsaquo;</a>
       </div>
@@ -95,6 +93,24 @@
       upload(e.dataTransfer.files);
     }
 
+    function addImageToThumbnails(file) {
+      var count = $("ul.thumbnails li").length;
+      var thumbnail = ["<li><a class='thumbnail' onclick='imageToCarousel(",
+                       count,
+                       ")'><img src='img/",
+                       file.name,
+                       "'/></a></li>",
+                       $("ul.thumbnails").html()
+                      ].join("");
+
+      $("ul.thumbnails").html(thumbnail);
+    }
+
+    function addImageToCarousel(file) {
+            $(".item").removeClass("active");
+            $(".carousel-inner").append("<div class='active item'><img alt='' src='img/" + encodeURI(file.name) + "'></div");
+    }
+
     function upload(files) {
       var i;
       for(i = 0; i < files.length; i++) {
@@ -107,14 +123,8 @@
         xhr.open("POST", "upload/", true);
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
-            //thumbnail portion
-            var newestThumbnailCount = $("ul.thumbnails li").length;
-            var newestThumbnail = "<li><a class='thumbnail' onclick='imageToCarousel(" + newestThumbnailCount + ")'><img src='img/" + file.name + "'/></a></li>" + $("ul.thumbnails").html();
-            $("ul.thumbnails").html(newestThumbnail);
-            
-            //carousel portion
-            $(".item").removeClass("active");
-            $(".carousel-inner").append("<div class='active item'><img alt='' src='img/" + encodeURI(file.name) + "'></div");
+            addImageToThumbnails(file);
+            addImageToCarousel(file);
           }          
         };
         xhr.send(formData);

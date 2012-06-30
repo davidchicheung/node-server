@@ -28,7 +28,7 @@ $( document ).ready( function() {
                 $( ".carousel-inner" ).append( carouselImage );
 
                 thumbnail = 
-                        [ "<li><a class='thumbnail' onclick='imageToCarousel(",
+                        [ "<li><a class='thumbnail' onclick='toCarouselImage(",
                           i,
                           ")'><img src='img/",
                           image,

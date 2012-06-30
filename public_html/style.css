@@ -73,11 +73,3 @@ div#thumbnails .thumbnails img {
     font-size: 20px;
     line-height: 40px;
 }
-
-.carousel .active {
-    text-align: center;
-}
-
-.carousel .item > img {
-    display: inline !important;
-}

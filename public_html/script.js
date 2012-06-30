@@ -130,7 +130,7 @@ function upload( files ) {
 }
 
 // Image Server Push Setup
-var socket = io.connect( '192.168.0.14:8080' );
+var socket = io.connect( 'cmpt470.csil.sfu.ca:8009/node' );
 
 socket.on('update', function ( data ) {
     addImageToThumbnails( data.fileName );

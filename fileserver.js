@@ -26,7 +26,7 @@ app.post(/upload\/$/, function(req, resp) {
                 return write500(resp, "failed to upload image");
             }
 
-            io.sockets.emit("update", { location : files.image.name });
+            io.sockets.emit("update", { fileName : files.image.name });
 
             resp.writeHead(200, {"Content-Type":"application/json"})
             resp.write(JSON.stringify({"status":"complete"}));

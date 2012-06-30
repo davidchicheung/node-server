@@ -114,18 +114,12 @@ function upload( files ) {
 
         var xhr = new XMLHttpRequest();
         xhr.open( "POST", "upload/", true );
-        xhr.onreadystatechange = function() {
-            if ( xhr.readyState == 4 ) {
-                addImageToThumbnails( fileName );
-                addImageToCarousel( fileName );
-            }          
-        };
         xhr.send( formData );
     }
 }
 
 // Image Server Push Setup
-var socket = io.connect( 'http://localhost:3000' );
+var socket = io.connect( '192.168.0.14:8080' );
 
 socket.on('update', function ( data ) {
     addImageToThumbnails( data.fileName );

@@ -1,134 +1,32 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script src="bootstrap.js"></script>
-    <script src="socket.io/socket.io.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <link rel="stylesheet" type="text/css" href="bootstrap.css">
-  </head>
-  
-  <body>
-    <div id="photoGallery">
-      <div id="thumbnailGallery">
-        <div id="thumbnails">
-          <ul class="thumbnails"/>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script src="bootstrap.js"></script>
+        <script src="socket.io/socket.io.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" type="text/css" href="bootstrap.css">
+    </head>
+    
+    <body>
+        <div id="photoGallery">
+            <div id="thumbnailGallery">
+                <div id="thumbnails">
+                    <ul class="thumbnails"/>
+                </div>
+                <div id="dropZone">
+                    <span>Drop Zone</span>
+                </div>
+            </div>
+            <div id="mainCarousel" class="carousel slide">
+                <div class="carousel-inner">
+                <!-- when a user adds a new photo this should dynamically udate with HTML -->
+                </div>
+                <a class="carousel-control left" href="#mainCarousel" data-slide="prev">&lsaquo;</a>
+                <a class="carousel-control right" href="#mainCarousel" data-slide="next">&rsaquo;</a>
+            </div>
         </div>
-        <div id="dropZone">
-          <span>Drop Zone</span>
-        </div>
-      </div>
-      <div id="mainCarousel" class="carousel slide">
-        <div class="carousel-inner">
-          <!-- when a user adds a new photo this should dynamically udate with HTML -->
-        </div>
-        <a class="carousel-control left" href="#mainCarousel" data-slide="prev">&lsaquo;</a>
-        <a class="carousel-control right" href="#mainCarousel" data-slide="next">&rsaquo;</a>
-      </div>
-    </div>
-  </body>
-
-  <script>
-    $(document).ready(function(){
-      $.ajax({
-        url: "img/",
-        dataType: 'json',
-        success: function(data){          
-          for(i in data){
-            var image = data[i];
-            if(i == 0){
-              $(".carousel-inner").append("<div class='active item'><img alt='' src='img/" + encodeURI(image) + "'></div");
-            }
-            else{
-              $(".carousel-inner").append("<div class='item'><img alt='' src='img/" + encodeURI(image) + "'></div");
-            }
-            var thumbnail = ["<li><a class='thumbnail' onclick='imageToCarousel(",
-                             i,
-                             ")'><img src='img/",
-                             image,
-                             "'/></a></li>"
-                            ].join("");
-
-            $("ul.thumbnails").append(thumbnail);
-          }
-        }
-      });
-      
-      $('#mainCarousel').carousel({
-        interval: 5000,
-      });
-
-    });
-
-    function imageToCarousel(index) {
-      $("#mainCarousel").carousel(index);
-    }
-
-    var dropZone = document.getElementById("dropZone");
-  
-    dropZone.addEventListener("dragleave", dragLeave, false);
-    dropZone.addEventListener("dragover", dragEnter, false);
-    dropZone.addEventListener("drop", drop, false);
-  
-    function stopEvent(e) {
-      e.stopPropagation();
-      e.preventDefault();
-    }
-
-    function dragEnter(e) {
-      stopEvent(e);
-      dropZone.style.border = "1px solid #0088CC";
-    }
-
-    function dragLeave(e) {
-      stopEvent(e);
-      dropZone.style.border = "1px dashed #BBBBBB";
-    }
-
-    function drop(e) {
-      stopEvent(e);
-      dropZone.style.border = "1px dashed #BBBBBB";
-            
-      upload(e.dataTransfer.files);
-    }
-
-    function addImageToThumbnails(file) {
-      var count = $("ul.thumbnails li").length;
-      var thumbnail = ["<li><a class='thumbnail' onclick='imageToCarousel(",
-                       count,
-                       ")'><img src='img/",
-                       file.name,
-                       "'/></a></li>",
-                       $("ul.thumbnails").html()
-                      ].join("");
-
-      $("ul.thumbnails").html(thumbnail);
-    }
-
-    function addImageToCarousel(file) {
-            $(".item").removeClass("active");
-            $(".carousel-inner").append("<div class='active item'><img alt='' src='img/" + encodeURI(file.name) + "'></div");
-    }
-
-    function upload(files) {
-      var i;
-      for(i = 0; i < files.length; i++) {
-        var file = files[i];        
-        
-        var formData = new FormData();
-        formData.append("image", file);
-
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "upload/", true);
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState == 4) {
-            addImageToThumbnails(file);
-            addImageToCarousel(file);
-          }          
-        };
-        xhr.send(formData);
-      }
-    }
-  </script>
+    </body>
+    <script src="script.js"></script>
 </html>

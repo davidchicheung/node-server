@@ -2,6 +2,10 @@
 var cycling = false;
 
 $( document ).ready( function() {
+    $( "#connectingModal" ).modal({
+        keyboard: false
+    });
+
     $.ajax({
         url: "img/",
         dataType: 'json',
@@ -39,9 +43,9 @@ $( document ).ready( function() {
             }
 
             if ( data.length <= 0 ) {
-                $( '#mainCarousel' ).carousel('pause');
+                $( "#mainCarousel" ).carousel( "pause" );
             } else {
-                $( '#mainCarousel' ).carousel('cycle');
+                $( "#mainCarousel" ).carousel( "cycle" );
             }
         }
     });
@@ -130,9 +134,14 @@ function upload( files ) {
 }
 
 // Image Server Push Setup
-var socket = io.connect( 'cmpt470.csil.sfu.ca:8009', { resource : "node/socket.io"} );
+var socket = io.connect( "cmpt470.csil.sfu.ca:8009", { resource : "node/socket.io"} );
 
-socket.on('update', function ( data ) {
+socket.on( "connected", function ( data ) {
+    $( "#connectingModal" ).modal( "hide" );
+    $( "#connectedModal" ).modal();
+});
+
+socket.on( "update", function ( data ) {
     addImageToThumbnails( data.fileName );
     addImageToCarousel( data.fileName );
     toCarouselImage(  $( "ul.thumbnails li" ).length );

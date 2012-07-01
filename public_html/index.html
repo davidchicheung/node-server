@@ -8,7 +8,6 @@
         <link rel="stylesheet" type="text/css" href="bootstrap.css">
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
-    
     <body>
         <div id="photoGallery">
             <div id="thumbnailGallery">
@@ -16,7 +15,7 @@
                     <ul class="thumbnails"/>
                 </div>
                 <div id="dropZone">
-                    <span>Drop Zone</span>
+                    <span>Drop Images Here</span>
                 </div>
             </div>
             <div id="mainCarousel" class="carousel slide">
@@ -25,6 +24,26 @@
                 </div>
                 <a class="carousel-control left" href="#mainCarousel" data-slide="prev">--<a>
                 <a class="carousel-control right" href="#mainCarousel" data-slide="next">++</a>
+            </div>
+        </div>
+        <div class="modal hide" id="connectingModal">
+            <div class="modal-header">
+                <h3>Connecting</h3>
+            </div>
+            <div class="modal-body">
+                <p>A connection is being established--please wait</p>
+            </div>
+        </div>
+        <div class="modal hide" id="connectedModal">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h3>Connected</h3>
+            </div>
+            <div class="modal-body">
+                <p>You can now load images</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn" data-dismiss="modal">Close</a>
             </div>
         </div>
     </body>

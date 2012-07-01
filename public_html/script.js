@@ -9,29 +9,29 @@ $( document ).ready( function() {
     $.ajax({
         url: "img/",
         dataType: 'json',
-        success: function( data ) {          
+        success: function( data ) {
             for ( i in data ) {
                 var image = data[i];
                 var carouselImage;
                 var thumbnail;
-                
+
                 if ( i == 0 ) {
-                    carouselImage = 
+                    carouselImage =
                             [ "<div class='active item'><img alt='' src='img/",
                               encodeURI( image ),
                               "'></div"
                             ].join( "" ) ;
                 } else {
-                    carouselImage = 
+                    carouselImage =
                             [ "<div class='item'><img alt='' src='img/",
                               encodeURI( image ),
                               "'></div"
                             ].join( "" );
                 }
-                
+
                 $( ".carousel-inner" ).append( carouselImage );
 
-                thumbnail = 
+                thumbnail =
                         [ "<li><a class='thumbnail' onclick='toCarouselImage(",
                           i,
                           ")'><img src='img/",
@@ -42,22 +42,26 @@ $( document ).ready( function() {
                 $( "ul.thumbnails" ).append( thumbnail );
             }
 
-            if ( data.length <= 0 ) {
+            if ( data.length <= 1 ) {
                 $( "#mainCarousel" ).carousel( "pause" );
             } else {
                 $( "#mainCarousel" ).carousel( "cycle" );
-            }
+           	cycling = true;
+	    }
         }
     });
 
 });
 
 function toCarouselImage( index ) {
-    $( "#mainCarousel" ).carousel( index );
-
-    if ( !cycling ) {
-        $( '#mainCarousel' ).carousel( "cycle" );
+    if ( cycling ) {
+	$( "#mainCarousel" ).carousel( index );
+	return;
+    }
+    if ( !cycling && index > 0 ) {
+        $( "#mainCarousel" ).carousel( "cycle" );
         cycling = true;
+	return;
     }
 }
 
@@ -86,15 +90,14 @@ function dragLeave( e ) {
 function drop( e ) {
     stopEvent( e );
     dropZone.style.border = "1px dashed #BBBBBB";
-                
     upload( e.dataTransfer.files );
 }
 
 // Image Upload Setup
 function addImageToThumbnails( fileName ) {
     var count = $( "ul.thumbnails li" ).length;
-    
-    var thumbnail = 
+
+    var thumbnail =
             [ "<li><a class='thumbnail' onclick='toCarouselImage(",
               count,
               ")'><img src='img/",
@@ -109,7 +112,7 @@ function addImageToThumbnails( fileName ) {
 function addImageToCarousel( fileName ) {
     $( ".item" ).removeClass( "active" );
 
-    var thumbnail = 
+    var thumbnail =
             [ "<div class='active item'><img alt='' src='img/",
               encodeURI( fileName ),
               "'></div>"
@@ -123,7 +126,7 @@ function upload( files ) {
     var i;
     for ( i = 0; i < files.length; i++ ) {
         var file = files[i];
-        
+
         var formData = new FormData();
         formData.append( "image", file );
 
@@ -144,5 +147,5 @@ socket.on( "connected", function ( data ) {
 socket.on( "update", function ( data ) {
     addImageToThumbnails( data.fileName );
     addImageToCarousel( data.fileName );
-    toCarouselImage(  $( "ul.thumbnails li" ).length );
+    toCarouselImage(  $( "ul.thumbnails li" ).length - 1 );
 });
